@@ -19,4 +19,5 @@ podman compose up -d // ejecutar en la carpeta del proyecto
 
 sudo systemctl start postgresql-17// puede ser ejecutado desde cualquer ubicación
 make run
+
 # task-manager

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"html"
 	"strings"
 
 	"task-manager/internal/domain"
@@ -27,6 +28,7 @@ func (s *TaskService) ListTasks(ctx context.Context) ([]*domain.Task, error) {
 
 func (s *TaskService) CreateTask(ctx context.Context, title, description string) (*domain.Task, error) {
 	title = strings.TrimSpace(title)
+	title = html.EscapeString(title)
 	if title == "" {
 		return nil, fmt.Errorf("%w: title is required", domain.ErrBadRequest)
 	}
@@ -43,6 +45,7 @@ func (s *TaskService) CreateTask(ctx context.Context, title, description string)
 
 func (s *TaskService) UpdateTask(ctx context.Context, id int64, title, description string, status domain.TaskStatus) (*domain.Task, error) {
 	title = strings.TrimSpace(title)
+	title = html.EscapeString(title)
 	if title == "" {
 		return nil, fmt.Errorf("%w: title is required", domain.ErrBadRequest)
 	}
