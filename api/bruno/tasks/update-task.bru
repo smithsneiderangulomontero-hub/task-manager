@@ -1,0 +1,22 @@
+meta {
+  name: Update Task
+  type: http
+  seq: 4
+}
+put {
+  url: {{baseUrl}}/api/v1/tasks/1
+  body: json
+  auth: none
+}
+body:json {
+  {
+    "title": "Fix the login bug",
+    "description": "Fixed on mobile",
+    "status": "in_progress"
+  }
+}
+tests {
+  test("status is 200 or 404", function() {
+    expect([200, 404]).to.include(res.getStatus());
+  });
+}

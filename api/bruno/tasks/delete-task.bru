@@ -1,0 +1,15 @@
+meta {
+  name: Delete Task
+  type: http
+  seq: 5
+}
+delete {
+  url: {{baseUrl}}/api/v1/tasks/1
+  body: none
+  auth: none
+}
+tests {
+  test("status is 204 or 404", function() {
+    expect([204, 404]).to.include(res.getStatus());
+  });
+}

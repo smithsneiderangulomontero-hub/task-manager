@@ -1,0 +1,18 @@
+meta {
+  name: List Tasks
+  type: http
+  seq: 2
+}
+get {
+  url: {{baseUrl}}/api/v1/tasks
+  body: none
+  auth: none
+}
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("response is an array", function() {
+    expect(res.getBody()).to.be.an("array");
+  });
+}

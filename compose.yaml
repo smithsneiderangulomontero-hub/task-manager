@@ -1,0 +1,38 @@
+services:
+  db:
+    image: docker.io/postgres:17-alpine
+    container_name: task-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-taskmanager}
+      POSTGRES_USER:     ${POSTGRES_USER:-smith}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-smith} -d ${POSTGRES_DB:-taskmanager}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: task-manager-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-smith}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-taskmanager}?sslmode=disable
+      PORT: "8080"
+      LOG_LEVEL: "info"
+      APP_ENV: "production"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
